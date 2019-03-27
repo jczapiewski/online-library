@@ -18,9 +18,9 @@ public class BookList {
 
     @RequestMapping("/api")
     public List<Book> list() {
-        bookList.add(new Book(1L, "Harry Potter", "JK Rowling"));
-        bookList.add(new Book(2L, "Game of Thrones", "Gorege RR Martin|"));
-        bookList.add(new Book(3L, "Lord of The Rings", "JRR Tolkien"));
+        bookList.add(new Book("Harry Potter", "JK Rowling"));
+        bookList.add(new Book("Game of Thrones", "Gorege RR Martin|"));
+        bookList.add(new Book("Lord of The Rings", "JRR Tolkien"));
         return bookList;
     }
 }
