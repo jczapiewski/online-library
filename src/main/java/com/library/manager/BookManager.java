@@ -8,7 +8,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class BookManager {
@@ -20,8 +19,9 @@ public class BookManager {
         this.repository = repository;
     }
 
-    public Optional<Book> findById(Long id) {
-        return repository.findById(id);
+    public Book findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
     }
 
     public Iterable<Book> findAll() {
@@ -32,8 +32,18 @@ public class BookManager {
         return repository.save(book);
     }
 
+    public Book update(Long id, Book book) {
+        Book updatedBook = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+        updatedBook.setTitle(book.getTitle());
+        updatedBook.setAuthor(book.getAuthor());
+        return repository.save(updatedBook);
+    }
+
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        Book book = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+        repository.delete(book);
     }
 
     @EventListener(ApplicationReadyEvent.class)
