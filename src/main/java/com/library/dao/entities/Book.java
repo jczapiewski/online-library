@@ -1,9 +1,10 @@
 package com.library.dao.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 public class Book {
@@ -14,14 +15,23 @@ public class Book {
 
     private String title;
 
-    private String author;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "book_author",
+            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
+    private Set<Author> authors = new HashSet<>();
 
     public Book() {
     }
 
-    public Book(String title, String author) {
+    public Book(String title, Author... authors) {
         this.title = title;
-        this.author = author;
+        this.authors = Stream.of(authors).collect(Collectors.toSet());
+        this.authors.forEach(x -> x.getBooks().add(this));
+    }
+
+    public Book(String title) {
+        this.title = title;
     }
 
     public long getId() {
@@ -40,20 +50,11 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                '}';
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 }
