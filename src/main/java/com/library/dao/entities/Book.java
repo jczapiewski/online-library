@@ -1,5 +1,7 @@
 package com.library.dao.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +13,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private long id;
 
     private String title;
