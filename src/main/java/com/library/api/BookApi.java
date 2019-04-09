@@ -1,4 +1,4 @@
-package com.library.controllers;
+package com.library.api;
 
 import com.library.dao.entities.Book;
 import com.library.manager.BookManager;
